@@ -27,6 +27,8 @@ class _HomeScreenState extends State<HomeScreen> {
   ActivityController activityController = Get.put(ActivityController());
   
   var maintainanceCalories;
+  var surplus;
+  var deficit;
 
   
 
@@ -35,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: const Text("BMR Calculator"),
+          title: const Text("Calorie Calculator"),
         ),
         body: SingleChildScrollView(
           child: Container(
@@ -90,7 +92,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         vertical: 20, horizontal: 60),
                     child: SwipeableButtonView(
                         isFinished: _isFinished,
-                      
                         onFinish: () async {
                           if (_bmrScore != 0 && maintainanceCalories != 0 ){
                             Get.snackbar("Success", 
@@ -98,9 +99,14 @@ class _HomeScreenState extends State<HomeScreen> {
                             backgroundColor: Colors.green,
                             colorText: Colors.white
                             );
-                            await Get.to(NewPage(maintainanceCalories));
+                            await Get.to(NewPage(maintainanceCalories,surplus,deficit));
                          
                           }
+                          else {
+                            Get.offAll(HomeScreen());
+                          }
+
+                  
 
                         
 
@@ -177,13 +183,15 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     else {
+      _bmrScore = 0;
       maintainanceCalories = 0;
       Get.snackbar("Error", "Please select your Activity Level",
        
       backgroundColor: Colors.red[400],colorText: Colors.white);
     }
 
-   
+   surplus = maintainanceCalories + 288.65;
+   deficit = maintainanceCalories - 280.53;
 
   }
 }
